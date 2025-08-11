@@ -30,10 +30,9 @@ body {
 /* Chặn cuộn ngang khi vuốt lật trang trên mobile, vẫn cho phép cuộn dọc */
 .book {
   position: relative;
-  width: var(--book-w);
-  height: var(--book-h);
-  perspective: 1800px;
-  touch-action: pan-y; /* quan trọng cho vuốt ngang */
+  width: clamp(220px, 90vw, 500px);
+  height: calc(clamp(220px, 90vw, 500px) * 4 / 3);
+  perspective: 2000px;
 }
 
 .page {
