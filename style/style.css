@@ -1,54 +1,64 @@
-*{
-  margin: 0;
-  padding: 0;
-  user-select: none;
-  cursor: auto;
-  box-sizing: border-box;
-  font-family: 'Pacifico', cursive;
-}
-body {
-  margin: 0;
-  background: #f0ebe3;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  font-family: 'Segoe UI', sans-serif;
+:root {
+  --book-w: clamp(280px, 92vw, 520px);
+  --book-h: calc(var(--book-w) * 4 / 3); /* tỉ lệ 3:4 cho điện thoại */
+  --page-radius: 12px;
+  --border: 2px;
+  --shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
 }
 
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+html,
+body {
+  height: 100%;
+}
+body {
+  background: #f0ebe3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Poppins", system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+  padding: max(env(safe-area-inset-top), 16px)
+    max(env(safe-area-inset-right), 16px) max(env(safe-area-inset-bottom), 16px)
+    max(env(safe-area-inset-left), 16px);
+}
+
+/* Chặn cuộn ngang khi vuốt lật trang trên mobile, vẫn cho phép cuộn dọc */
 .book {
   position: relative;
-  width: 300px;
-  height: 400px;
-  perspective: 2000px;
+  width: var(--book-w);
+  height: var(--book-h);
+  perspective: 1800px;
+  touch-action: pan-y; /* quan trọng cho vuốt ngang */
 }
 
 .page {
-  width: 100%;
-  height: 100%;
   position: absolute;
+  inset: 0;
   transform-style: preserve-3d;
   transform-origin: left;
-  transition: transform 1s ease;
+  transition: transform 0.7s ease;
+  border-radius: var(--page-radius);
+  box-shadow: var(--shadow);
+  background: #fff;
+  border: var(--border) solid #888;
   cursor: pointer;
-  border: 3px solid #888;
-  border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-  background: white;
 }
 
 .page .front,
 .page .back {
   position: absolute;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   backface-visibility: hidden;
   overflow: hidden;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 20px;
-  box-sizing: border-box;
+  padding: 10px;
 }
 
 .page .front img,
@@ -56,55 +66,51 @@ body {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border: 2px solid #444;
-  border-radius: 6px;
-  box-sizing: border-box;
+  border-radius: calc(var(--page-radius) - 4px);
+  border: 1px solid #4442;
 }
 
 .page .back {
   transform: rotateY(180deg);
 }
-
 .page.flipped {
   transform: rotateY(-180deg);
 }
 
-.intro-content, .end-content {
+.intro-content,
+.end-content {
   text-align: center;
-  border: 3px solid black;
-  padding: 10px;
-  border-radius: 15%;
-}
-
-.intro-content h1 {
-  font-size: 24px;
-  color: #fb18c2;
-  margin-bottom: 10px;
-}
-
-.intro-content p {
-  font-size: 14px;
-  color: #555;
-}
-
-.intro-content,.end-content {
   background: linear-gradient(135deg, #f5f7fa, #e0e4e8);
   width: 100%;
   height: 100%;
-  border-radius: 6px;
+  border-radius: calc(var(--page-radius) - 4px);
   display: flex;
   flex-direction: column;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  border: 2px solid #0005;
+  gap: 10px;
+  padding: 12px;
+}
+
+.intro-content h1 {
+  font-family: "Pacifico", cursive;
+  font-size: clamp(20px, 6vw, 28px);
+  color: #fb18c2;
 }
 
 .end-content h2 {
-  font-size: 18px;
-  margin-bottom: 10px;
+  font-size: clamp(16px, 4.5vw, 20px);
   color: #333;
 }
-
 .end-content span {
-  font-size: 14px;
+  font-size: clamp(12px, 4vw, 16px);
   color: #777;
+}
+
+/* Giảm chuyển động cho người dùng chọn Reduce Motion */
+@media (prefers-reduced-motion: reduce) {
+  .page {
+    transition: none;
+  }
 }
